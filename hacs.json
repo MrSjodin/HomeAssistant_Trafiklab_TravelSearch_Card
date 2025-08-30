@@ -1,0 +1,10 @@
+{
+  "name": "Trafiklab Travel Search Card",
+  "content_in_root": false,
+  "filename": "dist/trafiklab-travel-card.js",
+  "render_readme": true,
+  "country": ["SE"],
+  "homeassistant": "2023.8.0",
+  "hide_default_branch": false,
+  "zip_release": false
+}

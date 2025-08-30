@@ -1,0 +1,39 @@
+{
+  "name": "homeassistant-travel-search-card",
+  "version": "1.0.0",
+  "description": "Home Assistant custom card visualizing Resrobot Travel search trips (Trafiklab).",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint \"src/**/*.{ts,js}\"",
+    "prepack": "npm run build"
+  },
+  "files": [
+    "dist/trafiklab-travel-card.js",
+    "hacs.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrSjodin/HomeAssistant_Trafiklab_TravelSearch_Card.git"
+  },
+  "keywords": [
+    "home-assistant",
+    "lovelace",
+    "custom-card",
+    "trafiklab",
+    "resrobot"
+  ],
+  "devDependencies": {
+    "eslint": "^9.7.0",
+    "lit": "^3.1.3",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0"
+  },
+  "dependencies": {
+    "lit": "^3.1.3"
+  }
+}

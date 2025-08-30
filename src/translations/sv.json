@@ -1,0 +1,35 @@
+{
+  "card": {
+    "title": "Trafiklab Resa"
+  },
+  "editor": {
+    "sensor_entity": "Resrobot Resa-sensor",
+    "show_heading": "Visa rubrik",
+    "help_sensor": "Välj Resrobot Resa-sensorn från Trafiklab-integrationen",
+    "help_show_heading": "Visa kortets titel baserat på entitetens namn",
+    "max_legs": "Max antal delresor",
+    "help_max_legs": "Maximalt antal delresor som visas",
+  "max_items": "Max antal resor",
+  "help_max_items": "Maximalt antal resor som visas",
+    "show_details": "Visa detaljinformation per delresa",
+    "show_map_links": "Visa kartlänkar för start/slut"
+  },
+  "label": {
+    "mode_walk": "Gång",
+    "mode_bus": "Buss",
+    "mode_train": "Tåg",
+    "mode_metro": "Tunnelbana",
+    "mode_tram": "Spårvagn",
+    "mode_boat": "Båt",
+    "mode_taxi": "Taxi",
+    "start": "Start",
+    "end": "Slut",
+    "updated": "Uppdaterad {time}"
+  },
+  "empty": {
+    "no_trip": "Ingen resa tillgänglig"
+  },
+  "error": {
+    "entity_not_found": "Entitet hittades inte: {entity}"
+  }
+}

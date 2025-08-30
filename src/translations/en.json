@@ -1,0 +1,35 @@
+{
+  "card": {
+    "title": "Trafiklab Travel"
+  },
+  "editor": {
+    "sensor_entity": "Resrobot Travel sensor",
+    "show_heading": "Show heading",
+    "help_sensor": "Pick the Resrobot Travel sensor from Trafiklab Integration",
+    "help_show_heading": "Show the card title based on the entity name",
+    "max_legs": "Max legs",
+    "help_max_legs": "Maximum number of legs to display",
+  "max_items": "Max trips",
+  "help_max_items": "Maximum number of trips to show",
+    "show_details": "Show per-leg details",
+    "show_map_links": "Show map links for start/end"
+  },
+  "label": {
+    "mode_walk": "Walk",
+    "mode_bus": "Bus",
+    "mode_train": "Train",
+    "mode_metro": "Metro",
+    "mode_tram": "Tram",
+    "mode_boat": "Ferry",
+    "mode_taxi": "Taxi",
+    "start": "Start",
+    "end": "End",
+    "updated": "Updated {time}"
+  },
+  "empty": {
+    "no_trip": "No trip information"
+  },
+  "error": {
+    "entity_not_found": "Entity not found: {entity}"
+  }
+}
