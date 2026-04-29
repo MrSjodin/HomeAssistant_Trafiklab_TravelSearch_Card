@@ -1,6 +1,6 @@
 {
   "name": "Trafiklab Travel Search Card",
-  "filename": "dist/trafiklab-travel-card.js",
+  "filename": "trafiklab-travel-card.js",
   "country": ["NO", "SE", "DK", "FI"],
   "render_readme": true
 }
