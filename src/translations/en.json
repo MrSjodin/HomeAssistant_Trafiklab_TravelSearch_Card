@@ -12,7 +12,9 @@
   "max_items": "Max trips",
   "help_max_items": "Maximum number of trips to show",
     "show_details": "Show per-leg details",
-    "show_map_links": "Show map links for start/end"
+    "show_map_links": "Show map links for start/end",
+    "vertical_layout": "Vertical layout",
+    "help_vertical_layout": "Stack trip legs top-to-bottom (better for narrow screens)"
   },
   "label": {
     "mode_walk": "Walk",
