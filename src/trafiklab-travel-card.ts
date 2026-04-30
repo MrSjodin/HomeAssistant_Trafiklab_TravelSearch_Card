@@ -30,6 +30,7 @@ export interface TravelCardConfig {
   show_map_links?: boolean; // show map links for start/end coordinates when coords are available
   max_legs?: number; // per-trip leg cap to avoid overflow, default 12
   max_items?: number; // number of trips to show, default 3
+  vertical_layout?: boolean; // stack legs top-to-bottom instead of left-to-right
 }
 
 declare global {
@@ -56,7 +57,7 @@ export class TrafiklabTravelCard extends LitElement {
   private _config?: TravelCardConfig;
 
   static getStubConfig(): Partial<TravelCardConfig> {
-  return { show_details: false, show_map_links: true, max_legs: 12, max_items: 3 };
+  return { show_details: false, show_map_links: true, max_legs: 12, max_items: 3, vertical_layout: false };
   }
 
   static getConfigElement(): HTMLElement {
@@ -72,6 +73,7 @@ export class TrafiklabTravelCard extends LitElement {
       show_map_links: true,
       max_legs: 12,
       max_items: 3,
+      vertical_layout: false,
       ...config,
       type: CARD_TYPE,
     };
@@ -260,7 +262,9 @@ export class TrafiklabTravelCard extends LitElement {
 
           ${trips.length === 0
             ? html`<div class="content empty">${this._t('empty.no_trip')}</div>`
-            : trips.map((trip) => this._renderTripRow(trip))}
+            : html`<div class=${this._config?.vertical_layout ? 'trips-container trips-container--horizontal' : 'trips-container'}>
+                ${trips.map((trip) => this._renderTripRow(trip))}
+              </div>`}
 
           <div class="footer">
             ${entity.attributes?.attribution ? html`<span class="attr">${entity.attributes.attribution}</span>` : nothing}
@@ -290,7 +294,7 @@ export class TrafiklabTravelCard extends LitElement {
     const arrTime = legsAll.length > 0 ? (legsAll[legsAll.length - 1].dest_time || legsAll[legsAll.length - 1].arrival) : undefined;
 
     return html`
-      <div class="trip-row" role="list">
+      <div class=${`trip-row${this._config?.vertical_layout ? ' trip-row--vertical' : ''}`} role="list">
   <div class="endpoint-col">
           ${startHref
             ? html`<a class="endpoint-pill start-pill" title="${startCoord?.name ?? ''}" href=${startHref} target="_blank" rel="noreferrer"><ha-icon class="icon" .icon=${startIcon}></ha-icon>${depTime ? html`<span class="time">${this._formatTime(depTime)}</span>` : nothing}</a>`
@@ -298,7 +302,7 @@ export class TrafiklabTravelCard extends LitElement {
         </div>
 
         ${legsAll.length <= maxLegs
-          ? legs.map((leg, i) => this._renderLegColumn(leg, i < legs.length - 1))
+          ? legs.map((leg, i) => this._renderLegColumn(leg, i < legs.length - 1, this._config?.vertical_layout ?? false))
           : (() => {
               const total = legsAll.length;
               const displayMax = Math.max(2, maxLegs);
@@ -312,12 +316,12 @@ export class TrafiklabTravelCard extends LitElement {
               const rightLegs = legsAll.slice(rightStartIndex);
 
               return html`
-                ${leftLegs.map((leg) => this._renderLegColumn(leg, true))}
+                ${leftLegs.map((leg) => this._renderLegColumn(leg, true, this._config?.vertical_layout ?? false))}
                 <span class="dots">…</span>
-                <span class="arrow"><ha-icon .icon=${'mdi:chevron-right'}></ha-icon></span>
+                <span class="arrow"><ha-icon .icon=${this._config?.vertical_layout ? 'mdi:chevron-down' : 'mdi:chevron-right'}></ha-icon></span>
                 <span class="dots">…</span>
-                <span class="arrow"><ha-icon .icon=${'mdi:chevron-right'}></ha-icon></span>
-                ${rightLegs.map((leg, idx) => this._renderLegColumn(leg, idx < rightLegs.length - 1))}
+                <span class="arrow"><ha-icon .icon=${this._config?.vertical_layout ? 'mdi:chevron-down' : 'mdi:chevron-right'}></ha-icon></span>
+                ${rightLegs.map((leg, idx) => this._renderLegColumn(leg, idx < rightLegs.length - 1, this._config?.vertical_layout ?? false))}
               `;
             })()}
 
@@ -330,7 +334,7 @@ export class TrafiklabTravelCard extends LitElement {
     `;
   }
 
-  private _renderLegColumn(leg: any, hasNext: boolean) {
+  private _renderLegColumn(leg: any, hasNext: boolean, vertical = false) {
     const type = this._legType(leg);
     const icon = this._iconForType(type);
     const isWalk = this._isWalk(leg);
@@ -363,7 +367,7 @@ export class TrafiklabTravelCard extends LitElement {
             </div>`
           : nothing}
       </div>
-      ${hasNext ? html`<span class="arrow"><ha-icon .icon=${'mdi:chevron-right'}></ha-icon></span>` : nothing}
+      ${hasNext ? html`<span class="arrow"><ha-icon .icon=${vertical ? 'mdi:chevron-down' : 'mdi:chevron-right'}></ha-icon></span>` : nothing}
     `;
   }
 
@@ -481,7 +485,13 @@ export class TrafiklabTravelCard extends LitElement {
     .error { color: var(--error-color); }
     .empty { color: var(--tl-empty-color); padding: 8px 16px; }
 
+    .trips-container { display: block; }
+    .trips-container--horizontal { display: flex; flex-direction: row; align-items: flex-start; gap: 12px; overflow-x: auto; padding: 4px 0; }
     .trip-row { display: flex; align-items: flex-start; gap: var(--tl-trip-gap); padding: 6px 8px; }
+    .trip-row--vertical { flex-direction: column; align-items: flex-start; }
+    .trip-row--vertical .endpoint-col,
+    .trip-row--vertical .leg-col { width: 100%; align-items: flex-start; }
+    .trip-row--vertical .leg-details { padding-left: 0; }
     .endpoint-col { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; }
     .endpoint-pill { display: inline-flex; align-items: center; gap: 6px; padding: var(--tl-pill-padding-y) var(--tl-pill-padding-x); border-radius: var(--tl-pill-radius); background: var(--tl-pill-bg); box-shadow: inset 0 0 0 1px var(--tl-pill-border-color); text-decoration: none; color: inherit; }
     .start-pill { background: var(--tl-start-pill-bg); box-shadow: inset 0 0 0 1px var(--tl-start-pill-border-color); }
