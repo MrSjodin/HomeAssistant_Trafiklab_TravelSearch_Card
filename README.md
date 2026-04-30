@@ -10,6 +10,8 @@ A Home Assistant Lovelace card that shows end-to-end trips from a Trafiklab Resr
 - Leg pills show transport icon and line; walk legs show meters; Transfer shows "Transfer"
 - Optional details per leg (3 aligned rows): origin, destination, and time row "Dep => Arr • H:MM"
 - Handles long trips with middle ellipsis when `max_legs` is exceeded
+- Possibility to display the total trip duration (requires v0.7.0 or higher of [Trafiklab Integration](https://github.com/MrSjodin/HomeAssistant_Trafiklab_Integration))
+- Possibility to stack trip legs verically for narrow screens
 - Clickable map links for endpoints when coordinates are available (optional)
 - Configurable max trips and max legs
 - English and Swedish translations
