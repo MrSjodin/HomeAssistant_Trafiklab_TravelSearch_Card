@@ -12,7 +12,8 @@
   "max_items": "Max trips",
   "help_max_items": "Maximum number of trips to show",
     "show_details": "Show per-leg details",
-    "show_map_links": "Show map links for start/end"
+    "show_map_links": "Show map links for start/end",
+    "show_duration": "Show total journey time"
   },
   "label": {
     "mode_walk": "Walk",

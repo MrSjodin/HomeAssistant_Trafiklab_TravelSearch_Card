@@ -12,7 +12,8 @@
   "max_items": "Max antal resor",
   "help_max_items": "Maximalt antal resor som visas",
     "show_details": "Visa detaljinformation per delresa",
-    "show_map_links": "Visa kartlänkar för start/slut"
+    "show_map_links": "Visa kartlänkar för start/slut",
+    "show_duration": "Visa total tid för resan"
   },
   "label": {
     "mode_walk": "Gång",

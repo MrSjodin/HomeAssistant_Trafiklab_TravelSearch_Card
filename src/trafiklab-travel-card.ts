@@ -30,6 +30,7 @@ export interface TravelCardConfig {
   show_map_links?: boolean; // show map links for start/end coordinates when coords are available
   max_legs?: number; // per-trip leg cap to avoid overflow, default 12
   max_items?: number; // number of trips to show, default 3
+  show_duration?: boolean; // show total journey time at the right of each trip row
 }
 
 declare global {
@@ -56,7 +57,7 @@ export class TrafiklabTravelCard extends LitElement {
   private _config?: TravelCardConfig;
 
   static getStubConfig(): Partial<TravelCardConfig> {
-  return { show_details: false, show_map_links: true, max_legs: 12, max_items: 3 };
+  return { show_details: false, show_map_links: true, max_legs: 12, max_items: 3, show_duration: false };
   }
 
   static getConfigElement(): HTMLElement {
@@ -72,6 +73,7 @@ export class TrafiklabTravelCard extends LitElement {
       show_map_links: true,
       max_legs: 12,
       max_items: 3,
+      show_duration: false,
       ...config,
       type: CARD_TYPE,
     };
@@ -288,6 +290,8 @@ export class TrafiklabTravelCard extends LitElement {
     const endHref = this._config?.show_map_links && endHasCoord ? this._mapLink(endCoord) : undefined;
     const depTime = legsAll[0] ? (legsAll[0].origin_time || legsAll[0].departure) : undefined;
     const arrTime = legsAll.length > 0 ? (legsAll[legsAll.length - 1].dest_time || legsAll[legsAll.length - 1].arrival) : undefined;
+    const durationMinRaw = trip?.duration_total ?? this._sumDurationMinutes(legsAll);
+    const durationMin = typeof durationMinRaw === 'number' && isFinite(durationMinRaw) ? durationMinRaw : undefined;
 
     return html`
       <div class="trip-row" role="list">
@@ -323,8 +327,8 @@ export class TrafiklabTravelCard extends LitElement {
 
   <div class="endpoint-col">
           ${endHref
-            ? html`<a class="endpoint-pill end-pill" title="${endCoord?.name ?? ''}" href=${endHref} target="_blank" rel="noreferrer"><ha-icon class="icon" .icon=${endIcon}></ha-icon>${arrTime ? html`<span class="time">${this._formatTime(arrTime)}</span>` : nothing}</a>`
-            : html`<span class="endpoint-pill end-pill" title="${endCoord?.name ?? ''}"><ha-icon class="icon" .icon=${endIcon}></ha-icon>${arrTime ? html`<span class="time">${this._formatTime(arrTime)}</span>` : nothing}</span>`}
+            ? html`<a class="endpoint-pill end-pill" title="${endCoord?.name ?? ''}" href=${endHref} target="_blank" rel="noreferrer"><ha-icon class="icon" .icon=${endIcon}></ha-icon>${arrTime ? html`<span class="time">${this._formatTime(arrTime)}</span>` : nothing}${this._config?.show_duration && durationMin != null ? html`<span class="dur-sep"> - </span><ha-icon class="icon" .icon=${'mdi:timer-check'}></ha-icon><span class="time">${this._formatDurationTotal(durationMin)}</span>` : nothing}</a>`
+            : html`<span class="endpoint-pill end-pill" title="${endCoord?.name ?? ''}"><ha-icon class="icon" .icon=${endIcon}></ha-icon>${arrTime ? html`<span class="time">${this._formatTime(arrTime)}</span>` : nothing}${this._config?.show_duration && durationMin != null ? html`<span class="dur-sep"> - </span><ha-icon class="icon" .icon=${'mdi:timer-check'}></ha-icon><span class="time">${this._formatDurationTotal(durationMin)}</span>` : nothing}</span>`}
         </div>
       </div>
     `;
@@ -382,6 +386,14 @@ export class TrafiklabTravelCard extends LitElement {
 
   private _formatDurationHM(min: number): string {
     const m = Math.max(0, Math.floor(min));
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    return `${h}:${r.toString().padStart(2, '0')}`;
+  }
+
+  private _formatDurationTotal(min: number): string {
+    const m = Math.max(0, Math.floor(min));
+    if (m < 60) return `${m} min`;
     const h = Math.floor(m / 60);
     const r = m % 60;
     return `${h}:${r.toString().padStart(2, '0')}`;
@@ -497,6 +509,7 @@ export class TrafiklabTravelCard extends LitElement {
     .endpoint-details { font-size: var(--tl-font-size-details); color: var(--secondary-text-color); text-align: center; }
     .detail-line { line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .footer { display: flex; justify-content: space-between; padding: 6px 16px 10px; color: var(--secondary-text-color); font-size: var(--tl-font-size-footer); }
+    .dur-sep { opacity: 0.6; }
   `;
 }
 
