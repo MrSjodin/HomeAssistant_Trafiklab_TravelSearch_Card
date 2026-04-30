@@ -9,7 +9,7 @@ export class TrafiklabTravelCardEditor extends LitElement {
   private _config?: TravelCardConfig;
 
   setConfig(config: TravelCardConfig) {
-  const base: any = { type: 'trafiklab-travel-card', entity: '', show_details: false, show_map_links: true, max_legs: 12, max_items: 3, show_duration: false };
+  const base: any = { type: 'trafiklab-travel-card', entity: '', show_details: false, show_map_links: true, max_legs: 12, max_items: 3, show_duration: false, vertical_layout: false };
   this._config = { ...base, ...(config as any) } as any;
   }
 
@@ -47,6 +47,7 @@ export class TrafiklabTravelCardEditor extends LitElement {
       max_legs: this._config?.max_legs ?? 12,
       max_items: this._config?.max_items ?? 3,
       show_duration: (this._config as any)?.show_duration ?? false,
+      vertical_layout: this._config?.vertical_layout ?? false,
     };
 
     if (hasHaForm) {
@@ -55,10 +56,11 @@ export class TrafiklabTravelCardEditor extends LitElement {
         { name: 'show_details', selector: { boolean: {} } },
         { name: 'show_map_links', selector: { boolean: {} } },
         { name: 'show_duration', selector: { boolean: {} } },
+        { name: 'vertical_layout', selector: { boolean: {} } },
         { name: 'max_legs', selector: { number: { min: 1, max: 20, mode: 'box' } } },
         { name: 'max_items', selector: { number: { min: 1, max: 5, mode: 'box' } } },
       ] as any;
-      const data = { entity: cfg.entity, show_details: cfg.show_details, show_map_links: cfg.show_map_links, show_duration: cfg.show_duration, max_legs: cfg.max_legs, max_items: cfg.max_items } as any;
+      const data = { entity: cfg.entity, show_details: cfg.show_details, show_map_links: cfg.show_map_links, show_duration: cfg.show_duration, vertical_layout: cfg.vertical_layout, max_legs: cfg.max_legs, max_items: cfg.max_items } as any;
       return html`
         <ha-form
           .hass=${this.hass}
@@ -70,6 +72,7 @@ export class TrafiklabTravelCardEditor extends LitElement {
               case 'show_details': return t('editor.show_details');
               case 'show_map_links': return t('editor.show_map_links');
               case 'show_duration': return t('editor.show_duration');
+              case 'vertical_layout': return t('editor.vertical_layout');
               case 'max_legs': return t('editor.max_legs');
               case 'max_items': return t('editor.max_items');
               default: return String(s.name);
@@ -81,6 +84,7 @@ export class TrafiklabTravelCardEditor extends LitElement {
               case 'show_details': return t('editor.show_details');
               case 'show_map_links': return t('editor.show_map_links');
               case 'show_duration': return t('editor.show_duration');
+              case 'vertical_layout': return t('editor.help_vertical_layout');
               case 'max_legs': return t('editor.help_max_legs');
               case 'max_items': return t('editor.help_max_items');
               default: return undefined;
@@ -94,6 +98,7 @@ export class TrafiklabTravelCardEditor extends LitElement {
               show_details: !!value.show_details,
               show_map_links: value.show_map_links !== false,
               show_duration: !!value.show_duration,
+              vertical_layout: !!value.vertical_layout,
               max_legs: typeof value.max_legs === 'number' ? value.max_legs : Number(value.max_legs) || 12,
               max_items: typeof value.max_items === 'number' ? value.max_items : Number(value.max_items) || 3,
             } as TravelCardConfig as any;
@@ -141,6 +146,13 @@ export class TrafiklabTravelCardEditor extends LitElement {
                   <ha-switch .checked=${cfg.show_duration} .configValue=${'show_duration'} @change=${this._valueChanged}></ha-switch>
                 </ha-formfield>`
             : html`<label class="lbl"><input type="checkbox" .checked=${cfg.show_duration} data-config-value="show_duration" @change=${(e: Event) => this._valueChanged(e)} /> ${t('editor.show_duration')}</label>`}
+        </div>
+        <div class="field">
+          ${hasSwitch
+            ? html`<ha-formfield .label=${t('editor.vertical_layout')}>
+                  <ha-switch .checked=${cfg.vertical_layout} .configValue=${'vertical_layout'} @change=${this._valueChanged}></ha-switch>
+                </ha-formfield>`
+            : html`<label class="lbl"><input type="checkbox" .checked=${cfg.vertical_layout} data-config-value="vertical_layout" @change=${(e: Event) => this._valueChanged(e)} /> ${t('editor.vertical_layout')}</label>`}
         </div>
         <div class="field">
           ${hasTextfield
