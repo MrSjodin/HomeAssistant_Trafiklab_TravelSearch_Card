@@ -27,6 +27,9 @@ A Home Assistant Lovelace card that shows end-to-end trips from a Trafiklab Resr
 2. Install "Trafiklab Travel Search Card".
 3. Reload resources when prompted.
 
+Note: The card is to be included as default in HACS, however the HACS team has some backlog before this card can be included. They work as hard as they can! 😅 Meanwhile, use this shortcut button to add the repository in your Home Assistant:
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=MrSjodin&repository=HomeAssistant_Trafiklab_DynamicTravelSearch_Card&category=plugin)
+
 ### Manual
 1. Build or download `trafiklab-travel-card.js` from the latest GitHub release.
 2. Copy it to `config/www/trafiklab-travel-card/` on your HA instance.
